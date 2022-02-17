@@ -1,5 +1,6 @@
-package gofood;
+package gofood.storage;
 
+import gofood.Constants;
 import gofood.model.FoodItem;
 
 import java.util.ArrayList;

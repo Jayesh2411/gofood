@@ -1,10 +1,11 @@
 package gofood.service;
 
 import gofood.Constants;
-import gofood.Memory;
+import gofood.storage.Memory;
 import gofood.model.FoodItem;
 import gofood.model.Order;
 
+import java.io.*;
 import java.util.Scanner;
 
 import static gofood.Constants.*;
@@ -63,6 +64,16 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void displayInvoice() {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("bill.txt"), "utf-8"))) {
+            writer.write(order.toString()+"\n\n "+"Total Amount to be paid  "+bill);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println(order.toString());
         System.out.println("Your bill is " + bill);
     }

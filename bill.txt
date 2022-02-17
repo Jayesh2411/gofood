@@ -1,0 +1,4 @@
+Invoice 
+ 
+ Order{isPeakHour='', isNightOrder='', isSpecial='', items=[PIZZA]}
+ Total Amount to be paid  177.5
