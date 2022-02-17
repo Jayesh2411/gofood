@@ -24,5 +24,3 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Run All tests Go Food
-      run: mvn test --file pom.xml

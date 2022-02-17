@@ -1,8 +1,8 @@
 package gofood.service;
 
 import gofood.Constants;
-import gofood.model.FoodItem;
 import gofood.Memory;
+import gofood.model.FoodItem;
 import gofood.model.Order;
 
 import java.util.Scanner;
