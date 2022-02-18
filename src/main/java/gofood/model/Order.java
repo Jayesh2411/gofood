@@ -1,22 +1,39 @@
 package gofood.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Arrays;
 
 public class Order {
 
-
+    public Integer orderID;
     public String isPeakHour = "No";
     public String isNightOrder = "No";
     public String isSpecial = "NO";
-    public String[] items;
+
+    @Autowired
+    public FoodItem[] foodItems;
+
+
+    public Order() {
+    }
+
+    public Order(Integer orderID, String isPeakHour, String isNightOrder, String isSpecial, FoodItem[] foodItems) {
+        this.orderID = orderID;
+        this.isPeakHour = isPeakHour;
+        this.isNightOrder = isNightOrder;
+        this.isSpecial = isSpecial;
+        this.foodItems = foodItems;
+    }
 
     @Override
     public String toString() {
-        return "Invoice \n \n "+"Order{" +
-                "isPeakHour='" + isPeakHour + '\'' +
+        return "Order{" +
+                "orderID=" + orderID +
+                ", isPeakHour='" + isPeakHour + '\'' +
                 ", isNightOrder='" + isNightOrder + '\'' +
                 ", isSpecial='" + isSpecial + '\'' +
-                ", items=" + Arrays.toString(items) +
+                ", foodItems=" + Arrays.toString(foodItems) +
                 '}';
     }
 }

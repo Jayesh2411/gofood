@@ -1,6 +1,4 @@
-gofood/DeliveryCharge.class
 gofood/model/FoodItem.class
-gofood/Memory.class
 gofood/Constants.class
 gofood/GoFoodApp.class
 gofood/service/FoodServiceImpl.class

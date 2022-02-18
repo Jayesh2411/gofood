@@ -1,5 +1,9 @@
 package gofood.model;
 
+import gofood.Constants;
+import org.springframework.stereotype.Component;
+
+@Component
 public class FoodItem {
     String itemName;
     Float itemPrice;
@@ -17,8 +21,25 @@ public class FoodItem {
         this.quantity = quantity;
     }
 
+    public FoodItem(String itemName, Integer quantity) {
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.itemPrice = Constants.valueOf(itemName.toUpperCase().trim()).getVal();
+    }
+
+    public FoodItem(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public FoodItem() {
+    }
+
     public float getItemPrice() {
         return itemPrice;
+    }
+
+    public void setItemPrice(Float itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
     @Override
@@ -31,5 +52,17 @@ public class FoodItem {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 }

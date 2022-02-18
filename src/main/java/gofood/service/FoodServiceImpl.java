@@ -1,7 +1,6 @@
 package gofood.service;
 
 import gofood.Constants;
-import gofood.storage.Memory;
 import gofood.model.FoodItem;
 import gofood.model.Order;
 
@@ -11,22 +10,15 @@ import java.util.Scanner;
 import static gofood.Constants.*;
 
 public class FoodServiceImpl implements FoodService {
-
-    public Memory memory;
+    public static Integer counter = 0;
     private Order order;
     private Float bill = 0.0f;
 
-    void initMemory() {
-        this.memory = new Memory();
-    }
-
     public FoodServiceImpl() {
         this.order = new Order();
-        this.initMemory();
     }
 
     public FoodServiceImpl(Order order) {
-        this.initMemory();
         this.order = order;
     }
 
@@ -36,37 +28,41 @@ public class FoodServiceImpl implements FoodService {
         System.out.println("Special Day? ");
         order.isSpecial = scanner.nextLine().trim().toUpperCase();
         System.out.println("Items: ");
-        order.items = scanner.nextLine().trim().toUpperCase().split(",");
+        String itemLine = scanner.nextLine().trim().toUpperCase();
+        if (itemLine != "") {
+            String items[] = itemLine.split(",");
+            FoodItem foodItems[] = new FoodItem[items.length];
+            for (String i : items) {
+                foodItems[0] = new FoodItem(i);
+            }
+            order.foodItems = foodItems;
+        }
         System.out.println("Peak hour? ");
         order.isPeakHour = scanner.nextLine().trim().toUpperCase();
         System.out.println("Night Order? ");
         order.isNightOrder = scanner.nextLine().trim().toUpperCase();
     }
 
-    @Override
-    public void createFoodItems() {
-        for (String item : order.items) {
-            memory.foodItems.add(new FoodItem(item, memory.getFoodItemPriceMap().get(Constants.valueOf(item.trim()))));
-        }
+    public void setOrder(Order order) {
+        order.orderID = counter++;
+        this.order = order;
     }
 
     @Override
     public void generateBill() {
+
         Float totalItemPrices = 0.0f;
-        for (FoodItem item : memory.foodItems) {
-            totalItemPrices += (item.getItemPrice() * item.getQuantity());
+        for (FoodItem item : order.foodItems) {
+            totalItemPrices += (Constants.valueOf(item.getItemName().toUpperCase().trim()).getVal() * item.getQuantity());
         }
         bill = addGST(totalItemPrices);
         if (totalItemPrices < Constants.minimumOrder) {
             getDeliveryCharges(bill);
         }
-    }
-
-    @Override
-    public void displayInvoice() {
+        //writing to a file bill.txt
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("bill.txt"), "utf-8"))) {
-            writer.write(order.toString()+"\n\n "+"Total Amount to be paid  "+bill);
+                new FileOutputStream("bill_" + order.orderID + ".txt"), "utf-8"))) {
+            writer.write(order.toString() + "\n\n " + "Total Amount to be paid:  INR " + bill);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -74,6 +70,11 @@ public class FoodServiceImpl implements FoodService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void displayInvoice() {
+
         System.out.println(order.toString());
         System.out.println("Your bill is " + bill);
     }
@@ -87,26 +88,26 @@ public class FoodServiceImpl implements FoodService {
     void getDeliveryCharges(Float totalItemPrice) {
 
         boolean isNormalDelivery = true;
-        if (order.isSpecial.equalsIgnoreCase("yes")) {
+        if (order.isSpecial.equalsIgnoreCase("YES")) {
             isNormalDelivery = false;
-            totalItemPrice += memory.getDeliveryChargesMap().get(SPECIAL_DAY);
+            totalItemPrice += SPECIAL_DAY.getVal();
         }
-        if (order.isPeakHour.equalsIgnoreCase("yes")) {
+        if (order.isPeakHour.equalsIgnoreCase("YES")) {
             isNormalDelivery = false;
-            totalItemPrice += memory.getDeliveryChargesMap().get(PEAK_HOUR);
+            totalItemPrice += PEAK_HOUR.getVal();
         }
-        if (order.isNightOrder.equalsIgnoreCase("yes")) {
+        if (order.isNightOrder.equalsIgnoreCase("YES")) {
             isNormalDelivery = false;
-            totalItemPrice += memory.getDeliveryChargesMap().get(NIGHT_CHARGES);
+            totalItemPrice += NIGHT_CHARGES.getVal();
         }
         if (isNormalDelivery) {
-            totalItemPrice += memory.getDeliveryChargesMap().get(NORMAL_CHARGES);
+            totalItemPrice += NORMAL_CHARGES.getVal();
         }
         bill = totalItemPrice;
     }
 
     Float addGST(Float totalItemPrice) {
-        return totalItemPrice * (100 + memory.getGst()) / 100f;
+        return totalItemPrice * (100 + GST.getVal()) / 100f;
     }
 
 }

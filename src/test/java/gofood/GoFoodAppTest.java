@@ -35,10 +35,10 @@ public class GoFoodAppTest {
         Order order = new Order();
         order.isSpecial = "YES";
         order.isNightOrder = "YES";
+        order.foodItems = new FoodItem[]{new FoodItem("burger", 100f), new FoodItem("coke", 50f)};
 
         FoodServiceImpl foodService = new FoodServiceImpl(order);
-        foodService.memory.foodItems.add(new FoodItem("burger", 100f));
-        foodService.memory.foodItems.add(new FoodItem("coke", 50f));
+        foodService.setOrder(order);
 
         goFoodApp = new GoFoodApp();
         goFoodApp.foodService = foodService;
@@ -46,14 +46,16 @@ public class GoFoodAppTest {
     }
 
     private void generateTestDataForBurgerPizzaAndCoke() {
+
         Order order = new Order();
         order.isSpecial = "YES";
         order.isNightOrder = "YES";
+        order.isPeakHour = "YES";
+        order.foodItems = new FoodItem[]{new FoodItem("burger", 100f, 2),
+                new FoodItem("coke", 50f),
+                new FoodItem("pizza", 150f, 2)};
 
         FoodServiceImpl foodService = new FoodServiceImpl(order);
-        foodService.memory.foodItems.add(new FoodItem("burger", 100f, 2));
-        foodService.memory.foodItems.add(new FoodItem("pizza", 150f, 2));
-        foodService.memory.foodItems.add(new FoodItem("coke", 50f));
 
         goFoodApp = new GoFoodApp();
         goFoodApp.foodService = foodService;
@@ -64,9 +66,10 @@ public class GoFoodAppTest {
         Order order = new Order();
         order.isSpecial = "YES";
         order.isPeakHour = "YES";
+        order.foodItems = new FoodItem[]{
+                new FoodItem("pizza", 150f, 1)};
 
         FoodServiceImpl foodService = new FoodServiceImpl(order);
-        foodService.memory.foodItems.add(new FoodItem("pizza", 150f, 1));
 
         goFoodApp = new GoFoodApp();
         goFoodApp.foodService = foodService;
