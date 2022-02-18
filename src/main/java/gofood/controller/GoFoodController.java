@@ -23,15 +23,15 @@ public class GoFoodController {
 
 
     @PostMapping("/input")
-    public String setInput(@RequestBody Order order) {
+    public Order setInput(@RequestBody Order order) {
         foodService.setOrder(order);
-        return "Your Order Number " + order.orderID + " Received!";
+        return order;
     }
 
     @PostMapping("/bill")
-    public String getBill() {
-        foodService.generateBill();
-        return "Bill Generated";
+    public String getBill(@RequestParam Integer id) {
+        foodService.generateBill(id);
+        return "Bill generated for order " + id;
     }
 
     @PostMapping("/invoice")

@@ -3,6 +3,7 @@ package gofood.service;
 import gofood.Constants;
 import gofood.model.FoodItem;
 import gofood.model.Order;
+import gofood.storage.Memory;
 
 import java.io.*;
 import java.util.Scanner;
@@ -11,15 +12,18 @@ import static gofood.Constants.*;
 
 public class FoodServiceImpl implements FoodService {
     public static Integer counter = 0;
+    public Memory memory;
     private Order order;
     private Float bill = 0.0f;
 
     public FoodServiceImpl() {
         this.order = new Order();
+        this.memory = new Memory();
     }
 
     public FoodServiceImpl(Order order) {
         this.order = order;
+        this.memory = new Memory();
     }
 
     @Override
@@ -45,15 +49,20 @@ public class FoodServiceImpl implements FoodService {
 
     public void setOrder(Order order) {
         order.orderID = counter++;
+        for (int i = 0; i < order.foodItems.length; i++) {
+            order.foodItems[i].setItemPrice(Constants.valueOf(order.foodItems[i].getItemName().toUpperCase().trim()).getVal());
+        }
         this.order = order;
+        this.memory.orderMap.put(order.orderID, order);
+
     }
 
     @Override
-    public void generateBill() {
-
+    public void generateBill(Integer id) {
+        Order order = memory.orderMap.get(id);
         Float totalItemPrices = 0.0f;
         for (FoodItem item : order.foodItems) {
-            totalItemPrices += (Constants.valueOf(item.getItemName().toUpperCase().trim()).getVal() * item.getQuantity());
+            totalItemPrices += (item.getItemPrice() * item.getQuantity());
         }
         bill = addGST(totalItemPrices);
         if (totalItemPrices < Constants.minimumOrder) {

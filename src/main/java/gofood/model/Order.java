@@ -14,7 +14,6 @@ public class Order {
     @Autowired
     public FoodItem[] foodItems;
 
-
     public Order() {
     }
 
