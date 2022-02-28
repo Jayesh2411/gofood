@@ -21,7 +21,11 @@ public class GoFoodController {
         return data;
     }
 
-
+    @GetMapping("")
+    public String welcome() {
+        return "Welcome to Food Applicaton GO FOOD!!";
+    }
+    
     @PostMapping("/input")
     public Order setInput(@RequestBody Order order) {
         foodService.setOrder(order);
